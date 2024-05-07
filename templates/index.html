@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Faculty Search Engine</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <div class="container">
@@ -11,7 +11,7 @@
         <form id="search-form" class="search-bar" onsubmit="performSearch(event)">
             <input type="text" id="search-query" placeholder="Enter Query">
             <button type="submit">
-                <img src="images/search.png" alt="Search Icon">
+                <img src="{{ url_for('static', filename='images/search.png') }}" alt="Search Icon">
             </button>
         </form>
 
@@ -20,6 +20,6 @@
             <!-- The search results will be dynamically added here -->
         </div>
     </div>
-    <script src="script.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
