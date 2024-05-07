@@ -1,19 +1,25 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta name="viewport" content="width=device.width, initial-scale=1.0">
-        <title>Search Bar</title>
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
-        <div class="container">
-            <form action="https://www.google.com/search" methods="get" class="search-bar">
-                <input type="text" placeholder="Enter Query" name="q">
-                <button type="submit"><img src="images/search.png"></button>
-            </form>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Faculty Search Engine</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Search Bar -->
+        <form id="search-form" class="search-bar" onsubmit="performSearch(event)">
+            <input type="text" id="search-query" placeholder="Enter Query">
+            <button type="submit">
+                <img src="images/search.png" alt="Search Icon">
+            </button>
+        </form>
+
+        <!-- Results Container -->
+        <div id="results-container" class="results-blur-background">
+            <!-- The search results will be dynamically added here -->
         </div>
-
-
-
-    </body>
+    </div>
+    <script src="script.js"></script>
+</body>
 </html>
