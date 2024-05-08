@@ -4,7 +4,7 @@ from flask_cors import CORS
 # Initialize Flask app
 app = Flask(__name__)
 CORS(app)
-
+print("test")
 @app.route('/')
 def home():
     # Render the HTML file
