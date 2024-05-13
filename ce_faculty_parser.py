@@ -1,11 +1,10 @@
 from bs4 import BeautifulSoup
 from pymongo import MongoClient
+import re
 from nltk.corpus import stopwords
 import nltk
 from nltk.stem import WordNetLemmatizer
-nltk.download('stopwords')
-nltk.download('wordnet')
-import re
+nltk.download()
 
 def connectDataBase():
 
@@ -50,6 +49,7 @@ def parse_text_pages(col, index, query):
             clean_text = re.sub(r'[“”"(),\.*:&]', '', clean_text)
             clean_text = [word.lower() for word in clean_text.split() if word.lower() not in stop_words]
             clean_text = [lemmatizer.lemmatize(word) for word in clean_text]
+
             text.append(clean_text)
             doc_terms.append([id] + [clean_text])
 
@@ -59,7 +59,7 @@ def parse_text_pages(col, index, query):
         doc_list = []
         documents_visited = []
         for id, terms in doc_terms:
-            if word in terms and id not in documents_visited:
+            if (word in terms) and (id not in documents_visited):
                 doc_list.append(id)
                 documents_visited.append(id)
     
@@ -67,8 +67,8 @@ def parse_text_pages(col, index, query):
         add_term_object(index, termdict)
 
 
-def add_term_object(col, termDictionary):
-    for term, documents in termDictionary.items():
+def add_term_object(col, term_dictionary):
+    for term, documents in term_dictionary.items():
         indexTerm = {
             "term" : term,
             "documents" : documents
