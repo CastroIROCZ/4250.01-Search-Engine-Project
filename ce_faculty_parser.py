@@ -1,11 +1,11 @@
 from bs4 import BeautifulSoup
 from pymongo import MongoClient
+import re
 from nltk.corpus import stopwords
 import nltk
 from nltk.stem import WordNetLemmatizer
 nltk.download('stopwords')
 nltk.download('wordnet')
-import re
 
 def connectDataBase():
 
