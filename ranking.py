@@ -89,4 +89,4 @@ query = input("Enter a search query: ")
 ranked_docs = search(query)
 
 for i, (similarity, doc) in enumerate(ranked_docs, 1):
-    print(f"{i}. {doc['url']} - Similarity: {similarity}")
+    print(f"{i}. {doc['url']} | Similarity: {similarity}")
