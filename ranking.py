@@ -43,10 +43,13 @@ def search(query):
 
     # gets the docs that have the query terms
     for term in query_terms:
-        result = inverted_index.find_one({'term': term})
-        if result:
-            for doc_id in result['documents']:
+        inverted_index_doc = inverted_index.find_one({'term': term})
+        if inverted_index_doc:
+            for doc_id in inverted_index_doc['documents']:
                 relevant_docs.add(doc_id)
+
+    if len(relevant_docs) == 0:
+        return relevant_docs
 
     # get the faculty pages from pages collection
     documents = []
@@ -62,7 +65,7 @@ def search(query):
     # print(queries)
 
     # instantiate the vectorizer object
-    tfidfvectorizer = TfidfVectorizer(analyzer= 'word', stop_words='english')
+    tfidfvectorizer = TfidfVectorizer(analyzer='word', stop_words='english')
 
     # convert the training set into a matrix.
     tfidf_matrix = tfidfvectorizer.fit_transform(docs + [queries])
@@ -72,7 +75,7 @@ def search(query):
     # store all rows(docs) except last one of TF-IDF matrix
     document_vectors = tfidf_matrix[:-1]
 
-    # get the cosine similarity scores between the query vector and docs vector
+    # get the cosine similarity scores between the TF-IDF query vector and TF-IDF docs vector
     similarities = cosine_similarity(query_vector, document_vectors).flatten()
 
     # combine cosine similarities with docs and sort in desc order
@@ -88,5 +91,8 @@ inverted_index = db.invertedIndex
 query = input("Enter a search query: ")
 ranked_docs = search(query)
 
-for i, (similarity, doc) in enumerate(ranked_docs, 1):
-    print(f"{i}. {doc['url']} | Similarity: {similarity}")
+if len(ranked_docs) > 0:
+    for i, (similarity, doc) in enumerate(ranked_docs, 1):
+        print(f"{i}. {doc['url']} | Similarity: {similarity}")
+else:
+    print("No results found")
