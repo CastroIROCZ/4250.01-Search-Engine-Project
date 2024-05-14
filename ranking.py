@@ -39,10 +39,10 @@ def parse_query(text):
 
 def search(query):
     relevant_docs = set()
-    terms = query.split()
+    query_terms = query.split()
 
     # gets the docs that have the query terms
-    for term in terms:
+    for term in query_terms:
         result = inverted_index.find_one({'term': term})
         if result:
             for doc_id in result['documents']:

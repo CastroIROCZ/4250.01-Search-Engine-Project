@@ -11,7 +11,6 @@ of the Civil Engineering faculty pages
 
 '''
 
-
 def connectDataBase():
     '''
     Connects to project database
@@ -30,17 +29,15 @@ def connectDataBase():
     except:
         print("Database not connected successfully")
 
-
 db = connectDataBase()
 
 pages = db.pages
 inverted_index = db.invertedIndex
 
-
 def parse_text_pages(col, index, url_pattern):
     '''
     Parsing function that stores term objects into the invertedIndex collection.
-
+    
     Parameters
     ----------
 
@@ -58,21 +55,21 @@ def parse_text_pages(col, index, url_pattern):
 
     '''
     faculty = list(col.find(url_pattern))
-
+    
     inverted_index = {}
-
+    
     for member in faculty:
         id = member['_id']
         html = member['html']
         bs = BeautifulSoup(html, 'html.parser')
         main_section = bs.find_all('div', class_='blurb')
-        side_bar = bs.find_all('div', class_='accolades')
+        side_bar = bs.find_all('div', class_= 'accolades')
         main_section.extend(side_bar)
 
         for cell in main_section:
-
+            
             cleaned_lemmatized_tokens = filter_text(cell)
-            print(cleaned_lemmatized_tokens)
+
             for token in cleaned_lemmatized_tokens:
                 if token not in inverted_index:
                     inverted_index[token] = [id]
@@ -83,7 +80,7 @@ def parse_text_pages(col, index, url_pattern):
 
 
 def add_term_object(col, term_dictionary):
-    '''
+    ''' 
     Adds a term object (dictionary) to the collection,
     where the object is the term, and a list of its documents
 
@@ -100,18 +97,17 @@ def add_term_object(col, term_dictionary):
 
     for term, documents in term_dictionary.items():
         term_object = {
-            "term": term,
-            "documents": documents
+            "term" : term,
+            "documents" : documents
         }
 
         col.insert_one(term_object)
-
 
 def filter_text(html_cell):
     '''
     Uses stopwords, lemmatizing, and regular expression
     filtering to clean the text to be ready to
-    store in the inverted index
+    store in the inverted index 
 
     Parameters
     ----------
@@ -119,7 +115,7 @@ def filter_text(html_cell):
     html_cell: BeautifulSoup tag object
         A BeautifulSoup tag inputted to extract the text
         and filter it fully for the inverted index
-
+     
     '''
 
     stop_words = set(stopwords.words('english'))
