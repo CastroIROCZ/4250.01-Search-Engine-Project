@@ -3,15 +3,12 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer, T
 from sklearn.metrics.pairwise import cosine_similarity
 from pymongo import MongoClient
 from bs4 import BeautifulSoup
-import pandas as pd
 import re
 
 def connectDataBase():
     '''
     Connects to project database
-
     '''
-
     DB_NAME = "pages"
     DB_HOST = "localhost"
     DB_PORT = 27017
@@ -19,14 +16,13 @@ def connectDataBase():
     try:
         client = MongoClient(host=DB_HOST, port=DB_PORT)
         db = client[DB_NAME]
-
         return db
     except:
         print("Database not connected successfully")
 
 def parse(text):
     bs = BeautifulSoup(text, 'html.parser')
-    new_text = bs.get_text(separator= '\n', strip=True)
+    new_text = bs.get_text(separator='\n', strip=True)
     new_text = new_text.lower()
     new_text = re.sub(r'[^a-zA-Z0-9\s]', '', new_text)
     new_text = re.sub(r'\s+', ' ', new_text)
@@ -61,8 +57,6 @@ def search(query):
     # parse the text from documents to calculate tf-idf vectors
     docs = [parse(doc['html']) for doc in fac_documents]
     queries = parse_query(query)
-    # print(docs)
-    # print(queries)
 
     # instantiate the vectorizer object
     tfidfvectorizer = TfidfVectorizer(analyzer='word', stop_words='english')
@@ -83,16 +77,25 @@ def search(query):
 
     return ranked_docs
 
-
 db = connectDataBase()
 
 pages = db.pages
 inverted_index = db.invertedIndex
+faculty_index = db.faculty_index  # Add faculty_index collection
+
 query = input("Enter a search query: ")
 ranked_docs = search(query)
 
 if len(ranked_docs) > 0:
     for i, (similarity, doc) in enumerate(ranked_docs, 1):
-        print(f"{i}. {doc['url']} | Similarity: {similarity}")
+        faculty_data = faculty_index.find_one({'page_id': doc['_id']})
+        if faculty_data:
+            print(f"Result {i}:")
+            print(f"Name: {faculty_data.get('name', 'No Name')}")
+            print(f"Email: {faculty_data.get('email', 'No Email')}")
+            print(f"Phone: {faculty_data.get('phone', 'No Phone')}")
+            print(f"URL: {doc['url']}")
+            print(f"Similarity: {similarity}")
+            print()
 else:
-    print("No results found")
+    print("No results found") 
