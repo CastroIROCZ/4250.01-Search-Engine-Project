@@ -75,13 +75,10 @@ def search(query):
     # get the cosine similarity scores between the query vector and docs vector
     similarities = cosine_similarity(query_vector, document_vectors).flatten()
 
-    # sorts the docs in descending order, argsort - obtain indicies
-    sorted_indices = similarities.argsort()[::-1]
+    # combine cosine similarities with docs and sort in desc order
+    ranked_docs = sorted(zip(similarities, documents), reverse=True)
 
-    # iterate over sorted indices of docs and store docs sorted by relevance :5 first 5
-    top_documents = [documents[i] for i in sorted_indices][:5]
-
-    return top_documents
+    return ranked_docs
 
 
 db = connectDataBase()
@@ -89,7 +86,7 @@ db = connectDataBase()
 pages = db.pages
 inverted_index = db.invertedIndex
 query = input("Enter a search query: ")
-top_documents = search(query)
+ranked_docs = search(query)
 
-for i, doc in enumerate(top_documents, 1):
-    print(f"{i}. {doc['url']}")
+for i, (similarity, doc) in enumerate(ranked_docs, 1):
+    print(f"{i}. {doc['url']} - Similarity: {similarity}")
