@@ -41,7 +41,7 @@ def search(query):
     relevant_docs = set()
     terms = query.split()
 
-    # gets the docs that have that term
+    # gets the docs that have the query terms
     for term in terms:
         result = inverted_index.find_one({'term': term})
         if result:
