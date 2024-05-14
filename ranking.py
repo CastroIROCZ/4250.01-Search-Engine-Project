@@ -52,14 +52,14 @@ def search(query):
         return relevant_docs
 
     # get the faculty pages from pages collection
-    documents = []
+    fac_documents = []
     for doc_id in relevant_docs:
         document = pages.find_one({'_id': doc_id})
         if document:
-            documents.append(document)
+            fac_documents.append(document)
 
     # parse the text from documents to calculate tf-idf vectors
-    docs = [parse(doc['html']) for doc in documents]
+    docs = [parse(doc['html']) for doc in fac_documents]
     queries = parse_query(query)
     # print(docs)
     # print(queries)
@@ -79,7 +79,7 @@ def search(query):
     similarities = cosine_similarity(query_vector, document_vectors).flatten()
 
     # combine cosine similarities with docs and sort in desc order
-    ranked_docs = sorted(zip(similarities, documents), reverse=True)
+    ranked_docs = sorted(zip(similarities, fac_documents), reverse=True)
 
     return ranked_docs
 

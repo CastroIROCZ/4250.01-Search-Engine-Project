@@ -53,12 +53,12 @@ def get_crawler_thread(frontier, num_targets):
             frontier.clear()
             frontier.append(url)
             pagesSet.add(url)
-            print('Found')
+            print('Found faculty page')
         else:
             if target_page(bs):
                 targets_found += 1
                 target_page_docs.append(url)
-                print('Found')
+                print(f"Found: {url}")
                 if targets_found == num_targets:
                     print('10 found')
                     frontier.clear()
