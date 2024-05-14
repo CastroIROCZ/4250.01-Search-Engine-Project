@@ -45,7 +45,7 @@ def parse_text_pages(col, index, url_pattern):
         The collection of all of the previously crawled pages
         that are already stored in the database
 
-    index: MondoDB collection
+    index: MongoDB collection
         The collection to store all of the parsed terms and
         a list of their documents present in
 
