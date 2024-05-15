@@ -31,8 +31,6 @@ def parse(text):
 
     tokens = [lemmatizer.lemmatize(word) for word in new_text.split()]
     lemmatized_text = ' '.join(tokens)
-    print(lemmatized_text)
-
     return lemmatized_text
 
 def parse_query(text):
@@ -41,7 +39,6 @@ def parse_query(text):
     text = re.sub(r'[^a-zA-Z0-9\s]', '', text)
     tokens = [lemmatizer.lemmatize(word) for word in text.split()]
     lemmatized_text = ' '.join(tokens)
-    print(lemmatized_text)
     return lemmatized_text
 
 def search(query):
