@@ -20,22 +20,34 @@ def connectDataBase():
     except:
         print("Database not connected successfully")
 
+
 def parse(text):
+    lemmatizer = WordNetLemmatizer()
     bs = BeautifulSoup(text, 'html.parser')
-    new_text = bs.get_text(separator='\n', strip=True)
+    new_text = bs.get_text(separator=' ', strip=True)
     new_text = new_text.lower()
     new_text = re.sub(r'[^a-zA-Z0-9\s]', '', new_text)
     new_text = re.sub(r'\s+', ' ', new_text)
-    return new_text
+
+    tokens = [lemmatizer.lemmatize(word) for word in new_text.split()]
+    lemmatized_text = ' '.join(tokens)
+    print(lemmatized_text)
+
+    return lemmatized_text
 
 def parse_query(text):
+    lemmatizer = WordNetLemmatizer()
     text = text.lower()
     text = re.sub(r'[^a-zA-Z0-9\s]', '', text)
-    return text
+    tokens = [lemmatizer.lemmatize(word) for word in text.split()]
+    lemmatized_text = ' '.join(tokens)
+    print(lemmatized_text)
+    return lemmatized_text
 
 def search(query):
     relevant_docs = set()
-    query_terms = query.split()
+    queries = parse_query(query)
+    query_terms = queries.split()
 
     # gets the docs that have the query terms
     for term in query_terms:
@@ -56,7 +68,6 @@ def search(query):
 
     # parse the text from documents to calculate tf-idf vectors
     docs = [parse(doc['html']) for doc in fac_documents]
-    queries = parse_query(query)
 
     # instantiate the vectorizer object
     tfidfvectorizer = TfidfVectorizer(analyzer='word', stop_words='english')
