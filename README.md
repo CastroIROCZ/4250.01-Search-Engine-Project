@@ -1,4 +1,4 @@
-Faculy Search Engine:
+Faculty Search Engine:
 
 Overview
 This project is a local faculty search engine that allows users to saerch for faculty information based on various research interests, publications, and more.
