@@ -84,3 +84,11 @@ body {
     background: rgba(225, 225, 225, 0.8);
     color: #000000;
 }
+
+.result-item img {
+    width: 35%; /*changing this number changes image size, higher = bigger image*/             
+    height: auto;           
+    display: block;         
+    margin: 0 auto 10px;     
+    border-radius: 8px;      
+}

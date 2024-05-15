@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, url_for
 from flask_cors import CORS
 import re
 from pymongo import MongoClient
@@ -79,6 +79,8 @@ def search():
                 'email': faculty_data.get('email', 'No Email'),
                 'phone': faculty_data.get('phone', 'No Phone'),
                 'url': doc['url'],
+                'image_url': faculty_data.get('image_url', url_for('static', filename='default_image.jpg')),
+                #'image_url': faculty_data.get('image_url', '/static/images/default.jpg'),  # Default image
                 'similarity': sim
             })
 
@@ -86,5 +88,3 @@ def search():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
-
-
