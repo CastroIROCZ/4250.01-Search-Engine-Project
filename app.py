@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, render_template, url_for
 from flask_cors import CORS
 import re
+from nltk import WordNetLemmatizer
 from pymongo import MongoClient
 from bs4 import BeautifulSoup
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -41,16 +42,27 @@ def search():
 
     # Process query and documents
     def parse(text):
+        lemmatizer = WordNetLemmatizer()
         bs = BeautifulSoup(text, 'html.parser')
         new_text = bs.get_text(separator=' ', strip=True)
         new_text = new_text.lower()
         new_text = re.sub(r'[^a-zA-Z0-9\s]', '', new_text)
         new_text = re.sub(r'\s+', ' ', new_text)
-        return new_text
+        tokens = [lemmatizer.lemmatize(word) for word in new_text.split()]
+        lemmatized_text = ' '.join(tokens)
+        return lemmatized_text
+
+    def parse_query(text):
+        lemmatizer = WordNetLemmatizer()
+        text = text.lower()
+        tokens = [lemmatizer.lemmatize(word) for word in text.split()]
+        lemmatized_text = ' '.join(tokens)
+        return lemmatized_text
 
     # Get relevant documents from inverted index
     relevant_docs = set()
-    query_terms = query.lower().split()
+    queries = parse_query(query)
+    query_terms = queries.split()
     for term in query_terms:
         doc = inverted_index.find_one({'term': term})
         if doc:
@@ -61,7 +73,7 @@ def search():
     # Prepare documents and query for TF-IDF
     docs = [parse(doc['html']) for doc in fac_documents if doc]
     tfidfvectorizer = TfidfVectorizer(analyzer='word', stop_words='english')
-    tfidf_wm = tfidfvectorizer.fit_transform(docs + [query])
+    tfidf_wm = tfidfvectorizer.fit_transform(docs + [queries])
     query_vector = tfidf_wm[-1]
     document_vectors = tfidf_wm[:-1]
 
@@ -87,4 +99,4 @@ def search():
     return jsonify({'results': results})
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
