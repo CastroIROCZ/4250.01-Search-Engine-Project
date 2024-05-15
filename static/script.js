@@ -4,7 +4,7 @@ function performSearch(event) {
     const query = document.getElementById('search-query').value.trim();
     if (!query) return;
 
-    fetch("http://localhost:5000/search", {
+    fetch("http://localhost:8000/search", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query: query })
