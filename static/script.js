@@ -32,18 +32,31 @@ function performSearch(event) {
 }
 
 // Function to update the results container with dummy data for now to test functionality 
+// Function to update the results container with received data
 function updateResults(results) {
     const resultsContainer = document.getElementById("results-container");
-    resultsContainer.innerHTML = ""; // Clear previous results
+    resultsContainer.innerHTML = "";  // Clear previous results
 
     // Display each result from the received data
     results.forEach(result => {
-        const item = document.createElement("a");
+        const item = document.createElement("div");
         item.className = "result-item";
-        item.href = result.link; // The URL of the result
-        item.target = "_blank";
-        item.innerText = result.name; // Display name
 
+        const link = document.createElement("a");
+        link.href = result.url;  // Set the URL of the result
+        link.innerText = result.name;  // Display name
+        link.target = "_blank";
+
+        const email = document.createElement("p");
+        email.innerText = `Email: ${result.email}`;
+        const phone = document.createElement("p");
+        phone.innerText = `Phone: ${result.phone}`;
+
+        item.appendChild(link);
+        item.appendChild(email);
+        item.appendChild(phone);
+        
         resultsContainer.appendChild(item);
     });
 }
+
