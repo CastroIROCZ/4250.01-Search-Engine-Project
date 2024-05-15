@@ -7,7 +7,7 @@ import requests
 
 def connectDataBase():
     # Creating a database connection object using psycopg2
-    DB_NAME = "pages"
+    DB_NAME = "CivilEngCrawler"
     DB_HOST = "localhost"
     DB_PORT = 27017
     try:
