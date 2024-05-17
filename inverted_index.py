@@ -125,10 +125,10 @@ def filter_text(html_cell):
     text = re.sub(r'https?://[^\s,]+', '', text)
     text = re.sub(r'[^a-zA-Z0-9\s]', '', text).lower()
 
-    tokens = [lemmatizer.lemmatize(word) for word in text.split()]
-    lemmatized_tokens = [word for word in tokens if word not in stop_words]
+    lemmatized_tokens = [lemmatizer.lemmatize(word) for word in text.split()]
+    filtered_lemmatized_tokens = [word for word in lemmatized_tokens if word not in stop_words]
 
-    return lemmatized_tokens
+    return filtered_lemmatized_tokens
 
 
 faculty_url_pattern = {'url': {'$regex': r"^https:\/\/www\.cpp\.edu\/faculty\/.*"}}
